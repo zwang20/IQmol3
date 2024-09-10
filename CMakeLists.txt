@@ -48,7 +48,7 @@ add_subdirectory(modules/openmesh  EXCLUDE_FROM_ALL)
 set(OPENMESH_LIBRARIES OpenMeshCoreStatic OpenMeshToolsStatic)
 
 
-include_directories(modules/openbabel/includel)
+include_directories(modules/openbabel/include)
 include_directories(${CMAKE_CURRENT_BINARY_DIR}/modules/openbabel/include)
 add_subdirectory(modules/openbabel EXCLUDE_FROM_ALL)
 
