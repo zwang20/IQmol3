@@ -35,7 +35,7 @@ elseif(UNIX)
    set(LINUX TRUE)
 endif()
 
-if(NOT LINUX)
+if(WIN32)
    set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 endif()
 
@@ -170,7 +170,7 @@ if (LINUX)
       ${IQmol_RESOURCES_RCC}
    )
 
-   target_link_libraries(${targetName} -static-libgcc -static-libstdc++)
+   # target_link_libraries(${targetName} -static-libgcc -static-libstdc++)
 endif (LINUX)
 
 

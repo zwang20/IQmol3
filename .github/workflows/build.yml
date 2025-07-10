@@ -76,8 +76,7 @@ jobs:
       - name: Build Project on MacOS
         if: ${{ matrix.os == 'macos-latest' }}
         env:
-          LDFLAGS: -L/opt/homebrew/opt/qt@5/lib
-          CPPFLAGS: -I/opt/homebrew/opt/qt@5/include
+          Qt5_DIR: /opt/homebrew/opt/qt@5
         run: |
           git rm -r modules
           cmake -B build
