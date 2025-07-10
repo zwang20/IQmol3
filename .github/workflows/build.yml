@@ -31,10 +31,16 @@ jobs:
           compiler: 'intel'
 
       - name: Install Qt
-        if: ${{ ! startsWith( matrix.os, 'macos' ) }}
+        if: ${{ ( ! startsWith( matrix.os, 'macos' ) ) && ( matrix.os != 'ubuntu-24.04-arm' ) }}
         uses: jurplel/install-qt-action@v4
         with:
           version: 5.*
+
+      - name: Install Dependencies on Ubuntu ARM
+        if: ${{ matrix.os == 'ubuntu-24.04-arm' }}
+        run: |
+          sudo apt-get update
+          sudo apt-get install qtbase5-dev -y
       
       - name: Install Dependencies on Ubuntu
         if: ${{ startsWith( matrix.os, 'ubuntu' ) }}
@@ -64,7 +70,6 @@ jobs:
           brew install qt@5
           brew install open-mesh
           brew install yaml-cpp
-          brew link open-babel
           brew link icu4c
           git submodule update --init modules/libQGLViewer
       
@@ -86,7 +91,9 @@ jobs:
 
       - name: Build Project on Windows
         if: ${{ startsWith( matrix.os, 'windows' ) }}
-        uses: threeal/cmake-action@v2.1.0
+        run: |
+          cmake -B build
+          cmake --build build
 
       - name: Build Project on MacOS 13
         if: ${{ matrix.os == 'macos-13' }}

@@ -49,9 +49,11 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 if(APPLE)
     # intel macos
     include_directories(/usr/local/include)
+    include_directories(/usr/local/opt/libarchive/include)
 
     # arm macos
     include_directories(/opt/homebrew/include)
+    include_directories(/opt/homebrew/opt/icu4c@77/include)
     include_directories(/opt/homebrew/opt/qt@5/include)
     include_directories(/opt/homebrew/opt/libarchive/include)
 endif()
