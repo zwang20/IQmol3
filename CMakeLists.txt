@@ -35,7 +35,9 @@ if(APPLE)
    include_directories(/opt/homebrew/opt/qt@5/include)
 endif()
 
-find_package(Qt5 COMPONENTS Core Gui Xml PrintSupport Widgets OpenGL Sql REQUIRED)
+if(NOT APPLE)
+   find_package(Qt5 COMPONENTS Core Gui Xml PrintSupport Widgets OpenGL Sql REQUIRED)
+endif()
 
 find_package(ZLIB REQUIRED)
 if(ZLIB_FOUND)
@@ -72,10 +74,8 @@ if(NOT LINUX)  # use system libraries for linux
    endif()
 
 elseif (LINUX)
-   find_package(libQGLViewer REQUIRED)
    find_package(OpenBabel3 REQUIRED)
    find_package(OpenMesh REQUIRED)
-
 endif()
 
 add_subdirectory(modules/libarchive EXCLUDE_FROM_ALL)
