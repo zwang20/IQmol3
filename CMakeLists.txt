@@ -31,7 +31,7 @@ endif()
 if(APPLE)
    # symbols not in the Qt libraries
    #set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -arch x86_64 -arch arm64")
-   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I/opt/homebrew/opt/qt@5/include")
+   #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I/opt/homebrew/opt/qt@5/include")
 elseif(UNIX)
    set(LINUX TRUE)
 endif()
@@ -47,6 +47,10 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR}/src)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 if(APPLE)
+    # intel macos
+    include_directories(/usr/local/include)
+
+    # arm macos
     include_directories(/opt/homebrew/include)
     include_directories(/opt/homebrew/opt/qt@5/include)
     include_directories(/opt/homebrew/opt/libarchive/include)
@@ -86,7 +90,10 @@ if(WIN32)  # use system libraries for unix-like
     include_directories(${CMAKE_CURRENT_BINARY_DIR}/modules/openbabel/include)
     add_subdirectory(modules/openbabel  EXCLUDE_FROM_ALL)
 
+    add_subdirectory(modules/libarchive EXCLUDE_FROM_ALL)
+
 elseif(APPLE)
+    # brew does not package libqglviewer
     include_directories(modules/libQGLViewer)
     add_subdirectory(modules  EXCLUDE_FROM_ALL)
 elseif(LINUX)
@@ -98,10 +105,6 @@ elseif(LINUX)
        include_directories(modules/libQGLViewer)
        add_subdirectory(modules  EXCLUDE_FROM_ALL)
    endif()
-endif()
-
-if(WIN32)
-   add_subdirectory(modules/libarchive EXCLUDE_FROM_ALL)
 endif()
 
 if (WITH_GROMACS)
@@ -195,11 +198,6 @@ if (WIN32)
    )
    set_target_properties(${targetName} PROPERTIES WIN32_EXECUTABLE ON)
 endif (WIN32)
-
-
-# This works on ubuntu, not sure about others
-#unset(CMAKE_Fortran_IMPLICIT_LINK_LIBRARIES)
-#set(FORTRAN_LIBRARIES libgfortran.a libquadmath.a)
 
 target_link_libraries (${targetName}
     Main
