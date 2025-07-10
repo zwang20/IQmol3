@@ -47,6 +47,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 if(APPLE)
    include_directories(/opt/homebrew/opt/qt@5/include)
+   include_directories(/opt/homebrew/opt/libarchive/include)
 endif()
 
 find_package(Qt5 COMPONENTS Core Gui Xml PrintSupport Widgets OpenGL Sql REQUIRED)
@@ -205,7 +206,6 @@ target_link_libraries (${targetName}
    Data
    Grid
    Util
-   Math
    Plot
    Fort
    libssh2
