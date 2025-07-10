@@ -87,9 +87,13 @@ if(WIN32)  # use system libraries for unix-like
 elseif(APPLE)
     include_directories(modules/libQGLViewer)
     add_subdirectory(modules  EXCLUDE_FROM_ALL)
-else()
+elseif(LINUX)
    find_package(OpenBabel3 REQUIRED)
    find_package(OpenMesh REQUIRED)
+
+    # ubuntu does not package libqglviewer
+   if (EXISTS modules/libQGLViewer)
+       link_directories(modules/libQGLViewer)
 endif()
 
 if(WIN32)

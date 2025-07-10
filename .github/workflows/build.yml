@@ -21,7 +21,13 @@ jobs:
           submodules: recursive
 
       - name: Setup Fortran
+        if: ${{ matrix.os != 'windows-latest' }}
         uses: fortran-lang/setup-fortran@v1
+
+      - name: Setup Fortran on Windows
+        if: ${{ matrix.os == 'windows-latest' }}
+        run: |
+          pacman -S mingw-w64-lfortran
 
       - name: Install Qt
         if: ${{ matrix.os != 'macos-latest' }}
@@ -38,7 +44,8 @@ jobs:
           sudo apt-get install liblzma-dev -y
           sudo apt-get install libb2-dev -y
           sudo apt-get install libssh2-1-dev -y
-          sudo apt-get install libqglviewer-headers libqglviewer-dev-qt5 -y
+          # sudo apt-get install libqglviewer-headers libqglviewer-dev-qt5 -y
+          sudo apt-get install libqglviewer-dev-qt5 -y
           sudo apt-get install libopenmesh-dev -y
           sudo apt-get install libyaml-cpp-dev -y
           sudo apt-get install libopenbabel-dev -y
@@ -54,7 +61,6 @@ jobs:
           brew install qt@5
           brew install open-mesh
           brew install yaml-cpp
-          git clone https://github.com/GillesDebunne/libQGLViewer.git
       
       - name: Install boost on Windows
         if: ${{ matrix.os == 'windows-latest' }}
@@ -85,7 +91,7 @@ jobs:
           Qt5_DIR: /opt/homebrew/opt/qt@5
         run: |
           git rm -r modules
-          mkdir modules
+          mkdir -p modules
           git clone https://github.com/GillesDebunne/libQGLViewer.git modules/libQGLViewer
           rm -rf build
           cmake -B build
