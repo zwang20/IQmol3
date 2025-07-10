@@ -32,22 +32,23 @@ jobs:
       - name: Install Dependencies on Ubuntu
         if: ${{ matrix.os == 'ubuntu-latest' }}
         run: |
-          sudo apt update
-          sudo apt install libarchive-dev -y
-          sudo apt install librust-bzip2-dev -y
-          sudo apt install liblzma-dev -y
-          sudo apt install libb2-dev -y
-          sudo apt install libssh2-1-dev -y
-          sudo apt install libqglviewer-headers libqglviewer-dev-qt5 -y
-          sudo apt install libopenmesh-dev -y
-          sudo apt install libyaml-cpp-dev -y
-          sudo apt install libopenbabel-dev -y
-          sudo apt install libboost-iostreams-dev libboost-serialization-dev -y
+          sudo apt-get update
+          sudo apt-get install libarchive-dev -y
+          sudo apt-get install librust-bzip2-dev -y
+          sudo apt-get install liblzma-dev -y
+          sudo apt-get install libb2-dev -y
+          sudo apt-get install libssh2-1-dev -y
+          sudo apt-get install libqglviewer-headers libqglviewer-dev-qt5 -y
+          sudo apt-get install libopenmesh-dev -y
+          sudo apt-get install libyaml-cpp-dev -y
+          sudo apt-get install libopenbabel-dev -y
+          sudo apt-get install libboost-iostreams-dev libboost-serialization-dev -y
       
       - name: Install Dependencies on MacOS
         if: ${{ matrix.os == 'macos-latest' }}
         run: |
           brew install boost
+          brew install libarchive
           brew install libssh2
           brew install open-babel
           brew install qt@5
@@ -69,6 +70,7 @@ jobs:
         run: |
           sudo ln -s /usr/include/openbabel3/openbabel /usr/include/
           git rm -r modules
+          rm -rf build
           cmake -B build
           cmake --build build --parallel
 
@@ -82,5 +84,6 @@ jobs:
           Qt5_DIR: /opt/homebrew/opt/qt@5
         run: |
           git rm -r modules
+          rm -rf build
           cmake -B build
           cmake --build build --parallel
