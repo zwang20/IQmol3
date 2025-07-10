@@ -5,7 +5,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [ubuntu-latest, windows-latest, macos-latest-large]
     name: Build Project
     runs-on: ${{ matrix.os }}
     steps:
@@ -28,14 +28,14 @@ jobs:
         run: |
           sudo apt update
           sudo apt install libssh2-1-dev -y
-          sudo apt install libqglviewer-dev-qt5 -y
+          sudo apt install libqglviewer-headers libqglviewer-dev-qt5 -y
           sudo apt install libopenmesh-dev -y
           sudo apt install libyaml-cpp-dev -y
           sudo apt install libopenbabel-dev -y
           sudo apt install libboost-iostreams-dev libboost-serialization-dev -y
       
       - name: Install Dependencies on MacOS
-        if: ${{ matrix.os == 'macos-latest' }}
+        if: ${{ matrix.os == 'macos-latest-large' }}
         run: |
           brew install boost
           brew install open-babel
