@@ -94,6 +94,7 @@ elseif(LINUX)
     # ubuntu does not package libqglviewer
    if (EXISTS modules/libQGLViewer)
        link_directories(modules/libQGLViewer)
+   endif()
 endif()
 
 if(WIN32)
