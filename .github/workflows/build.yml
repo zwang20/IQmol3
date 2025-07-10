@@ -28,6 +28,9 @@ jobs:
           git submodule deinit -f modules/openssl
           git submodule deinit -f modules/x246
           git submodule deinit -f modules/zlib
+      
+      - name: Checkout submodules
+        run: git submodule update --init --recursive
 
       - name: Build Project
         uses: threeal/cmake-action@v2.1.0
