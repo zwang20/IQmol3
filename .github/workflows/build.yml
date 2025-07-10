@@ -87,9 +87,7 @@ jobs:
       - name: Build Project on Windows
         if: ${{ startsWith( matrix.os, 'windows' ) }}
         run: |
-          ls -R "C:/Program Files (x86)/Intel/oneAPI/compiler/"
-          cat "C:\Program Files (x86)\Intel\oneAPI\compiler\latest\bin\compiler\README.txt"
-          cmake -B build -DCMAKE_Fortran_COMPILER="C:/Program Files (x86)/Intel/oneAPI/compiler/latest/bin/compiler/xfortcom.exe"
+          cmake -B build
           cmake --build build
 
       - name: Build Project on MacOS 13

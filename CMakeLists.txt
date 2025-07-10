@@ -25,11 +25,13 @@ if (EXISTS /opt/local/lib/)
 endif()
 
 if(APPLE)
-   # symbols not in the Qt libraries
-   #set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -arch x86_64 -arch arm64")
-   #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I/opt/homebrew/opt/qt@5/include")
+    # symbols not in the Qt libraries
+    #set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -arch x86_64 -arch arm64")
+    #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I/opt/homebrew/opt/qt@5/include")'
+    set(CMAKE_C_COMPILER "/usr/bin/clang")
+    set(CMAKE_CXX_COMPILER "/usr/bin/clang++")
 elseif(UNIX)
-   set(LINUX TRUE)
+    set(LINUX TRUE)
 endif()
 
 if(WIN32)
