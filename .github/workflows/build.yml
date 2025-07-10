@@ -64,7 +64,7 @@ jobs:
       - name: Build Project on Ubuntu
         if: ${{ matrix.os == 'ubuntu-latest' }}
         run: |
-          sudo ln -s openbabel3 /usr/include/openbabel
+          sudo ln -s /usr/include/openbabel3/openbabel /usr/include/
           git rm -r modules
           cmake -B build
           cmake --build build --parallel
