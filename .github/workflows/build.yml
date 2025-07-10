@@ -62,9 +62,8 @@ jobs:
 
       - name: Build Project on Ubuntu
         if: ${{ matrix.os == 'ubuntu-latest' }}
-        env:
-          QGLViewer_DIR: 
         run: |
+          sudo ln -s openbabel3 /usr/include/openbabel
           git rm -r modules
           cmake -B build
           cmake --build build --parallel
