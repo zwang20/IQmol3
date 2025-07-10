@@ -199,7 +199,7 @@ if (WIN32)
    set_target_properties(${targetName} PROPERTIES WIN32_EXECUTABLE ON)
 endif (WIN32)
 
-target_link_libraries (${targetName}
+target_link_libraries(${targetName}
     Main
     Process
     Parser
@@ -214,7 +214,6 @@ target_link_libraries (${targetName}
     Math
     Plot
     Fort
-    ssh2
     Amber
     yaml-cpp
     openbabel
@@ -236,8 +235,14 @@ target_link_libraries (${targetName}
     archive
 )
 
+if(LINUX)
+    target_link_libraries(${targetName} ssh2)
+else()
+    target_link_libraries(${targetName} libssh2)
+endif()
+
 if(QARCHIVE)
-   target_link_libraries (${targetName} archive_impl ${ARMADILLO_LIBRARY})
+   target_link_libraries(${targetName} archive_impl ${ARMADILLO_LIBRARY})
 else(QARCHIVE)
 #   target_link_libraries (${targetName} hdf5-static)
 endif(QARCHIVE)
