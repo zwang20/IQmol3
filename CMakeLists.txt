@@ -13,7 +13,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_BUILD_TYPE Release)
 
 #set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -Wno-deprecated")
-# Hide all warnings for 3rdparty code
+# Hide all warnings for 3rdparty code (TODO: re-enable warnings)
 if (MSVC)
     add_compile_options(/W0)
 else()
@@ -64,33 +64,32 @@ find_package(OpenSSL REQUIRED)
 
 if(WIN32)  # use system libraries for unix-like
 
-   find_package(ZSTD    REQUIRED)
+    find_package(ZSTD    REQUIRED)
 
-   # No CMakeLists.txt for libQGLViewer
-   include_directories(modules/libQGLViewer)
-   add_subdirectory(modules  EXCLUDE_FROM_ALL)
+    # No CMakeLists.txt for libQGLViewer
+    include_directories(modules/libQGLViewer)
+    add_subdirectory(modules  EXCLUDE_FROM_ALL)
 
-   include_directories(modules/libssh2/include)
-   add_subdirectory(modules/libssh2  EXCLUDE_FROM_ALL)
+    include_directories(modules/libssh2/include)
+    add_subdirectory(modules/libssh2  EXCLUDE_FROM_ALL)
 
-   include_directories(modules/openmesh/src)
-   add_subdirectory(modules/openmesh  EXCLUDE_FROM_ALL)
-   set(OPENMESH_LIBRARIES OpenMeshCoreStatic OpenMeshToolsStatic)
+    include_directories(modules/openmesh/src)
+    add_subdirectory(modules/openmesh  EXCLUDE_FROM_ALL)
+    set(OPENMESH_LIBRARIES OpenMeshCoreStatic OpenMeshToolsStatic)
 
-   include_directories(modules/yaml-cpp/include)
-   add_subdirectory(modules/yaml-cpp  EXCLUDE_FROM_ALL)
+    include_directories(modules/yaml-cpp/include)
+    add_subdirectory(modules/yaml-cpp  EXCLUDE_FROM_ALL)
 
-  include_directories(modules/openbabel/include)
-  include_directories(${CMAKE_CURRENT_BINARY_DIR}/modules/openbabel/include)
-  add_subdirectory(modules/openbabel  EXCLUDE_FROM_ALL)
+    include_directories(modules/openbabel/include)
+    include_directories(${CMAKE_CURRENT_BINARY_DIR}/modules/openbabel/include)
+    add_subdirectory(modules/openbabel  EXCLUDE_FROM_ALL)
 
+elseif(APPLE)
+    include_directories(modules/libQGLViewer)
+    add_subdirectory(modules  EXCLUDE_FROM_ALL)
 else()
    find_package(OpenBabel3 REQUIRED)
    find_package(OpenMesh REQUIRED)
-endif()
-
-if(APPLE)  # TODO: put this back
-    include_directories(libQGLViewer)
 endif()
 
 if(WIN32)
