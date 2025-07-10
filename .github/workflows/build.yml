@@ -5,7 +5,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-24.04, ubuntu-24.04-arm, windows-2022, macos-13, macos-14, macos-15]
+        os: [ubuntu-24.04, ubuntu-24.04-arm, windows-2022, macos-13, macos-14]
     name: Build Project
     runs-on: ${{ matrix.os }}
     steps:
@@ -88,7 +88,8 @@ jobs:
         if: ${{ startsWith( matrix.os, 'windows' ) }}
         run: |
           ls -R "C:/Program Files (x86)/Intel/oneAPI/compiler/"
-          cmake -B build -DCMAKE_Fortran_COMPILER="C:/Program Files (x86)/Intel/oneAPI/compiler/latest/windows/bin/ifort.exe"
+          cat "C:\Program Files (x86)\Intel\oneAPI\compiler\latest\bin\compiler\README.txt"
+          cmake -B build -DCMAKE_Fortran_COMPILER="C:\Program Files (x86)\Intel\oneAPI\compiler\latest\bin\compiler\xfortcom.exe"
           cmake --build build
 
       - name: Build Project on MacOS 13

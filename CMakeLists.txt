@@ -215,7 +215,6 @@ target_link_libraries(${targetName}
     Plot
     Fort
     Amber
-    yaml-cpp
     openbabel
     OpenMeshTools
     QGLViewer
@@ -236,7 +235,7 @@ target_link_libraries(${targetName}
 )
 
 if(LINUX)
-    target_link_libraries(${targetName} ssh2)
+    target_link_libraries(${targetName} ssh2 yaml-cpp)
 else()
     target_link_libraries(${targetName} libssh2)
 endif()
