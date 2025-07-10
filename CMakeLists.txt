@@ -12,7 +12,13 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 #set(CMAKE_BUILD_TYPE Debug)
 set(CMAKE_BUILD_TYPE Release)
 
-set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -Wno-deprecated")
+#set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -Wno-deprecated")
+# Hide all warnings for 3rdparty code
+if (MSVC)
+    add_compile_options(/W0)
+else()
+    add_compile_options(-w)
+endif()
 
 if(APPLE)
    # symbols not in the Qt libraries
@@ -35,9 +41,7 @@ if(APPLE)
    include_directories(/opt/homebrew/opt/qt@5/include)
 endif()
 
-if(NOT APPLE)
-   find_package(Qt5 COMPONENTS Core Gui Xml PrintSupport Widgets OpenGL Sql REQUIRED)
-endif()
+find_package(Qt5 COMPONENTS Core Gui Xml PrintSupport Widgets OpenGL Sql REQUIRED)
 
 find_package(ZLIB REQUIRED)
 if(ZLIB_FOUND)
