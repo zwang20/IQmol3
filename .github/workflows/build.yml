@@ -9,6 +9,10 @@ jobs:
     runs-on: ${{ matrix.os }}
     continue-on-error: true
     steps:
+
+      - name: Setup Fortran
+        uses: fortran-lang/setup-fortran@v1
+
       - name: Checkout Project
         uses: actions/checkout@v4.2.2
 
