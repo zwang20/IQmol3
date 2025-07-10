@@ -5,7 +5,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest-large]
+        os: [ubuntu-latest, windows-latest, macos-latest]
     name: Build Project
     runs-on: ${{ matrix.os }}
     steps:
@@ -19,6 +19,7 @@ jobs:
         uses: fortran-lang/setup-fortran@v1
 
       - name: Install Qt
+        if: ${{ matrix.os != 'macos-latest' }}
         uses: jurplel/install-qt-action@v4
         with:
           version: 5.*
@@ -27,6 +28,9 @@ jobs:
         if: ${{ matrix.os == 'ubuntu-latest' }}
         run: |
           sudo apt update
+          sudo apt install librust-bzip2-dev -y
+          sudo apt install liblzma-dev -y
+          sudo apt install libb2-dev -y
           sudo apt install libssh2-1-dev -y
           sudo apt install libqglviewer-headers libqglviewer-dev-qt5 -y
           sudo apt install libopenmesh-dev -y
@@ -35,8 +39,9 @@ jobs:
           sudo apt install libboost-iostreams-dev libboost-serialization-dev -y
       
       - name: Install Dependencies on MacOS
-        if: ${{ matrix.os == 'macos-latest-large' }}
+        if: ${{ matrix.os == 'macos-latest' }}
         run: |
+          brew install qt@5
           brew install boost
           brew install open-babel
       
