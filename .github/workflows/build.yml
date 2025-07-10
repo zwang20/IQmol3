@@ -65,7 +65,7 @@ jobs:
         env:
           QGLViewer_DIR: 
         run: |
-          cmake build
+          cmake --build
 
       - name: Build Project on Windows
         if: ${{ matrix.os == 'windows-latest' }}
@@ -77,4 +77,4 @@ jobs:
           LDFLAGS: -L/opt/homebrew/opt/qt@5/lib
           CPPFLAGS: -I/opt/homebrew/opt/qt@5/include
         run: |
-          cmake build
+          cmake --build
