@@ -11,9 +11,14 @@ jobs:
     steps:
 
       - name: Checkout Project
+        if: ${{ matrix.os != 'ubuntu-latest' }}
         uses: actions/checkout@v4.2.2
         with:
           submodules: recursive
+      
+      - name: Checkout Project on Ubuntu
+        if: ${{ matrix.os == 'ubuntu-latest' }}
+        uses: actions/checkout@v4.2.2
 
       - name: Setup Fortran
         uses: fortran-lang/setup-fortran@v1
@@ -55,5 +60,21 @@ jobs:
           # https://github.com/MarkusJx/prebuilt-boost/blob/main/versions-manifest.json
           boost_version: 1.73.0
 
-      - name: Build Project
+      - name: Build Project on Ubuntu
+        if: ${{ matrix.os == 'ubuntu-latest' }}
+        env:
+          QGLViewer_DIR: 
+        run: |
+          cmake build
+
+      - name: Build Project on Windows
+        if: ${{ matrix.os == 'windows-latest' }}
         uses: threeal/cmake-action@v2.1.0
+
+      - name: Build Project on MacOS
+        if: ${{ matrix.os == 'macos-latest' }}
+        env:
+          LDFLAGS: -L/opt/homebrew/opt/qt@5/lib
+          CPPFLAGS: -I/opt/homebrew/opt/qt@5/include
+        run: |
+          cmake build

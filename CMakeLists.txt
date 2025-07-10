@@ -72,7 +72,7 @@ if(NOT LINUX)  # use system libraries for linux
    endif()
 
 elseif (LINUX)
-   find_package(QGLViewer REQUIRED)
+   find_package(libQGLViewer REQUIRED)
    find_package(OpenBabel3 REQUIRED)
    find_package(OpenMesh REQUIRED)
 
