@@ -23,10 +23,13 @@ jobs:
         with:
           version: 5.*
       
-      - name: Install boost
-        uses: MarkusJx/install-boost@v2
-        with:
-          boost_version: 1.73.0
+      - name: Install boost on ubuntu
+        if: ${{ matrix.os == 'ubuntu-latest' }}
+        run: apt install libboost-iostreams-dev libboost-serialization-dev -y
+      
+      - name: Install boost on macos
+        if: ${{ matrix.os == 'macos-latest' }}
+        run: brew install boost -y
 
       - name: Build Project
         uses: threeal/cmake-action@v2.1.0
