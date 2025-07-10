@@ -95,6 +95,7 @@ elseif(LINUX)
     # ubuntu does not package libqglviewer
    if (EXISTS modules/libQGLViewer)
        include_directories(modules/libQGLViewer)
+       add_subdirectory(modules  EXCLUDE_FROM_ALL)
    endif()
 endif()
 
