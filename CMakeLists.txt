@@ -89,7 +89,7 @@ else()
    find_package(OpenMesh REQUIRED)
 endif()
 
-if(APPLE)
+if(APPLE)  # TODO: put this back
     include_directories(libQGLViewer)
 endif()
 
@@ -195,36 +195,40 @@ endif (WIN32)
 #set(FORTRAN_LIBRARIES libgfortran.a libquadmath.a)
 
 target_link_libraries (${targetName}
-   Main
-   Process
-   Parser
-   Network
-   Qui 
-   Layer
-   Viewer
-   Configurator
-   Data
-   Grid
-   Util
-   Plot
-   libssh2
-   yaml-cpp
-   openbabel
-   QGLViewer
-   Qt5::Core
-   Qt5::Gui
-   Qt5::Xml
-   Qt5::PrintSupport
-   Qt5::Widgets
-   Qt5::OpenGL
-   Qt5::Sql
-   ${OPENMESH_LIBRARIES}
-   ${Boost_LIBRARIES}
-   ${LIBSSH2_LIBRARY}
-   ${OPENGL_LIBRARIES}
-   ${ZLIB_LIBRARIES}
-   ${FORTRAN_LIBRARIES}
-   archive
+    Main
+    Process
+    Parser
+    Network
+    Qui
+    Layer
+    Viewer
+    Configurator
+    Data
+    Grid
+    Util
+    Math
+    Plot
+    Fort
+    ssh2
+    Amber
+    yaml-cpp
+    openbabel
+    OpenMeshTools
+    QGLViewer
+    Qt5::Core
+    Qt5::Gui
+    Qt5::Xml
+    Qt5::PrintSupport
+    Qt5::Widgets
+    Qt5::OpenGL
+    Qt5::Sql
+    ${OPENMESH_LIBRARIES}
+    ${Boost_LIBRARIES}
+    ${LIBSSH2_LIBRARY}
+    ${OPENGL_LIBRARIES}
+    ${ZLIB_LIBRARIES}
+    ${FORTRAN_LIBRARIES}
+    archive
 )
 
 if(QARCHIVE)
