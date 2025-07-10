@@ -13,6 +13,11 @@ jobs:
       - name: Setup Fortran
         uses: fortran-lang/setup-fortran@v1
 
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: 5.*
+
       - name: Checkout Project
         uses: actions/checkout@v4.2.2
 
