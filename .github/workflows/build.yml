@@ -23,15 +23,30 @@ jobs:
         with:
           version: 5.*
       
-      - name: Install boost on ubuntu
+      - name: Install Dependencies on Ubuntu
         if: ${{ matrix.os == 'ubuntu-latest' }}
         run: |
           sudo apt update
+          sudo apt install libssh2-dev -y
+          sudo apt install libqglviewer-dev-qt5 -y
+          sudo apt install libopenmesh-dev -y
+          sudo apt install libyaml-cpp-dev -y
+          sudo apt install libopenbabel-dev -y
           sudo apt install libboost-iostreams-dev libboost-serialization-dev -y
       
-      - name: Install boost on macos
+      - name: Install Boost on MacOS
         if: ${{ matrix.os == 'macos-latest' }}
         run: brew install boost
+      
+      - name: Install boost on Windows
+        if: ${{ matrix.os == 'windows-latest' }}
+        uses: MarkusJx/install-boost@v2
+        id: install-boost
+        with:
+          # REQUIRED: Specify the required boost version
+          # A list of supported versions can be found here:
+          # https://github.com/MarkusJx/prebuilt-boost/blob/main/versions-manifest.json
+          boost_version: 1.73.0
 
       - name: Build Project
         uses: threeal/cmake-action@v2.1.0
