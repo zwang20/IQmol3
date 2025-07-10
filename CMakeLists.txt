@@ -47,8 +47,9 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR}/src)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 if(APPLE)
-   include_directories(/opt/homebrew/opt/qt@5/include)
-   include_directories(/opt/homebrew/opt/libarchive/include)
+    include_directories(/opt/homebrew/lib/include)
+    include_directories(/opt/homebrew/opt/qt@5/include)
+    include_directories(/opt/homebrew/opt/libarchive/include)
 endif()
 
 find_package(Qt5 COMPONENTS Core Gui Xml PrintSupport Widgets OpenGL Sql REQUIRED)
