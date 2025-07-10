@@ -82,12 +82,12 @@ jobs:
         if: ${{ startsWith( matrix.os, 'ubuntu' ) }}
         run: |
           cmake -B build
-          cmake --build build -j3
+          cmake --build build -j4
 
       - name: Build Project on Windows
         if: ${{ startsWith( matrix.os, 'windows' ) }}
         run: |
-          & "C:\Program Files (x86)\Intel\oneAPI\setvars.bat" 
+          & "C:\Program Files (x86)\Intel\oneAPI\setvars.bat" --force
           cmake -B build
           cmake --build build
 

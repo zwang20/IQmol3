@@ -24,10 +24,6 @@ if (EXISTS /opt/local/lib/)
     link_directories(/opt/local/lib/)
 endif()
 
-if (EXISTS /opt/homebrew/lib/)
-    link_directories(/opt/homebrew/lib/)
-endif()
-
 if(APPLE)
    # symbols not in the Qt libraries
    #set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -arch x86_64 -arch arm64")
@@ -52,7 +48,10 @@ if(APPLE)
     include_directories(/usr/local/opt/libarchive/include)
 
     # arm macos
+    link_directories(/opt/local/lib)
+    link_directories(/opt/homebrew/opt/icu4c/lib)
     include_directories(/opt/homebrew/include)
+    include_directories(/opt/homebrew/opt/icu4c/include)
     include_directories(/opt/homebrew/opt/qt@5/include)
     include_directories(/opt/homebrew/opt/libarchive/include)
 endif()
