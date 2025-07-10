@@ -207,7 +207,6 @@ target_link_libraries (${targetName}
    Grid
    Util
    Plot
-   Fort
    libssh2
    yaml-cpp
    openbabel
