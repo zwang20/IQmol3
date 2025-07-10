@@ -5,7 +5,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [ubuntu-22.04, ubuntu-24.04, windows-latest, macos-13, macos-14]
     name: Build Project
     runs-on: ${{ matrix.os }}
     steps:
@@ -24,13 +24,13 @@ jobs:
         uses: fortran-lang/setup-fortran@v1
 
       - name: Install Qt
-        if: ${{ matrix.os != 'macos-latest' }}
+        if: ${{ ! startsWith( matrix.os, 'macos' ) }}
         uses: jurplel/install-qt-action@v4
         with:
           version: 5.*
       
       - name: Install Dependencies on Ubuntu
-        if: ${{ matrix.os == 'ubuntu-latest' }}
+        if: ${{ startsWith( matrix.os, 'ubuntu' ) }}
         run: |
           sudo apt-get update
           sudo apt-get install libarchive-dev -y
@@ -43,19 +43,22 @@ jobs:
           sudo apt-get install libyaml-cpp-dev -y
           sudo apt-get install libopenbabel-dev -y
           sudo apt-get install libboost-iostreams-dev libboost-serialization-dev -y
+          sudo ln -s /usr/include/openbabel3/openbabel /usr/include/
+          git submodule update --init modules/libQGLViewer
       
       - name: Install Dependencies on MacOS
-        if: ${{ matrix.os == 'macos-latest' }}
+        if: ${{ startsWith( matrix.os, 'macos' ) }}
         run: |
           brew install boost
+          brew install icu4c
           brew install libarchive
           brew install libssh2
           brew install open-babel
-          brew list open-babel
           brew install qt@5
           brew install open-mesh
           brew install yaml-cpp
           brew link open-babel
+          git submodule update --init modules/libQGLViewer
       
       - name: Install boost on Windows
         if: ${{ matrix.os == 'windows-latest' }}
@@ -68,11 +71,8 @@ jobs:
           boost_version: 1.73.0
 
       - name: Build Project on Ubuntu
-        if: ${{ matrix.os == 'ubuntu-latest' }}
+        if: ${{ startsWith( matrix.os, 'ubuntu' ) }}
         run: |
-          sudo ln -s /usr/include/openbabel3/openbabel /usr/include/
-          git submodule update --init modules/libQGLViewer
-          rm -rf build
           cmake -B build
           cmake --build build
 
@@ -80,14 +80,24 @@ jobs:
         if: ${{ matrix.os == 'windows-latest' }}
         uses: threeal/cmake-action@v2.1.0
 
-      - name: Build Project on MacOS
-        if: ${{ matrix.os == 'macos-latest' }}
+      - name: Build Project on MacOS 13
+        if: ${{ matrix.os == 'macos-13' }}
         env:
           Qt5_DIR: /opt/homebrew/opt/qt@5
         run: |
-          ls -l /opt/homebrew/lib
+          ls -l /opt/homebrew/lib/include
+          ls -l /opt/homebrew/lib/include/openbabel3
           sudo ln -s /opt/homebrew/Cellar/open-babel/3.1.1_2/include/openbabel3/openbabel /opt/homebrew/Cellar/open-babel/3.1.1_2/include/
-          git submodule update --init modules/libQGLViewer
-          rm -rf build
+          cmake -B build
+          cmake --build build
+
+      - name: Build Project on MacOS 14
+        if: ${{ matrix.os == 'macos-14' }}
+        env:
+          Qt5_DIR: /opt/homebrew/opt/qt@5
+        run: |
+          ls -l /opt/homebrew/lib/include
+          ls -l /opt/homebrew/lib/include/openbabel3
+          sudo ln -s /opt/homebrew/Cellar/open-babel/3.1.1_2/include/openbabel3/openbabel /opt/homebrew/Cellar/open-babel/3.1.1_2/include/
           cmake -B build
           cmake --build build
