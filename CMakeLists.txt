@@ -78,7 +78,9 @@ elseif (LINUX)
    find_package(OpenMesh REQUIRED)
 endif()
 
-add_subdirectory(modules/libarchive EXCLUDE_FROM_ALL)
+if(WIN32)
+   add_subdirectory(modules/libarchive EXCLUDE_FROM_ALL)
+endif()
 
 if (WITH_GROMACS)
    add_compile_definitions(GROMACS)
