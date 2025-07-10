@@ -25,11 +25,13 @@ jobs:
       
       - name: Install boost on ubuntu
         if: ${{ matrix.os == 'ubuntu-latest' }}
-        run: apt install libboost-iostreams-dev libboost-serialization-dev -y
+        run: |
+          sudo apt update
+          sudo apt install libboost-iostreams-dev libboost-serialization-dev -y
       
       - name: Install boost on macos
         if: ${{ matrix.os == 'macos-latest' }}
-        run: brew install boost -y
+        run: brew install boost
 
       - name: Build Project
         uses: threeal/cmake-action@v2.1.0
