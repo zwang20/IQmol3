@@ -26,6 +26,9 @@ jobs:
       - name: Build Boost
         id: boost
         uses: egor-tensin/build-boost@v1
+        with:
+          version: 1.88.0
+          libraries: filesystem program_options system
 
       - name: Build Project
         uses: threeal/cmake-action@v2.1.0
