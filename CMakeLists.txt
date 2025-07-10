@@ -20,10 +20,11 @@ else()
     add_compile_options(-w)
 endif()
 
-# The following are required for libzstd
 if (EXISTS /opt/local/lib/)
     link_directories(/opt/local/lib/)
-elseif (EXISTS /opt/homebrew/lib/)
+endif()
+
+if (EXISTS /opt/homebrew/lib/)
     link_directories(/opt/homebrew/lib/)
 endif()
 
@@ -93,7 +94,7 @@ elseif(LINUX)
 
     # ubuntu does not package libqglviewer
    if (EXISTS modules/libQGLViewer)
-       link_directories(modules/libQGLViewer)
+       include_directories(modules/libQGLViewer)
    endif()
 endif()
 

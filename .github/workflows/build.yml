@@ -27,7 +27,7 @@ jobs:
       - name: Setup Fortran on Windows
         if: ${{ matrix.os == 'windows-latest' }}
         run: |
-          C:\msys64\usr\bin\pacman -Syu mingw-w64-ucrt-x86_64-lfortran
+          C:\msys64\usr\bin\pacman -Syu mingw-w64-ucrt-x86_64-lfortran --noconfirm
 
       - name: Install Qt
         if: ${{ matrix.os != 'macos-latest' }}
@@ -58,6 +58,7 @@ jobs:
           brew install libarchive
           brew install libssh2
           brew install open-babel
+          brew link open-babel
           brew install qt@5
           brew install open-mesh
           brew install yaml-cpp
