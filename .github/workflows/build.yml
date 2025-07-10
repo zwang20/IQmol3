@@ -27,16 +27,18 @@ jobs:
         if: ${{ matrix.os == 'ubuntu-latest' }}
         run: |
           sudo apt update
-          sudo apt install libssh2-dev -y
+          sudo apt install libssh2-1-dev -y
           sudo apt install libqglviewer-dev-qt5 -y
           sudo apt install libopenmesh-dev -y
           sudo apt install libyaml-cpp-dev -y
           sudo apt install libopenbabel-dev -y
           sudo apt install libboost-iostreams-dev libboost-serialization-dev -y
       
-      - name: Install Boost on MacOS
+      - name: Install Dependencies on MacOS
         if: ${{ matrix.os == 'macos-latest' }}
-        run: brew install boost
+        run: |
+          brew install boost
+          brew install open-babel
       
       - name: Install boost on Windows
         if: ${{ matrix.os == 'windows-latest' }}
