@@ -23,12 +23,10 @@ jobs:
         with:
           version: 5.*
       
-      - name: Build Boost
-        id: boost
-        uses: egor-tensin/build-boost@v1
+      - name: Install boost
+        uses: MarkusJx/install-boost@v2
         with:
-          version: 1.88.0
-          libraries: filesystem program_options system
+          boost_version: 1.73.0
 
       - name: Build Project
         uses: threeal/cmake-action@v2.1.0
