@@ -31,6 +31,9 @@ include_directories(src)
 include_directories(${CMAKE_CURRENT_BINARY_DIR}/src)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 
+if(APPLE)
+   include_directories(/opt/homebrew/opt/qt@5/include)
+endif()
 
 find_package(Qt5 COMPONENTS Core Gui Xml PrintSupport Widgets OpenGL Sql REQUIRED)
 
@@ -69,6 +72,7 @@ if(NOT LINUX)  # use system libraries for linux
    endif()
 
 elseif (LINUX)
+   find_package(QGLViewer REQUIRED)
    find_package(OpenBabel3 REQUIRED)
    find_package(OpenMesh REQUIRED)
 
