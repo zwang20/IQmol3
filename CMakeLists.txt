@@ -20,9 +20,17 @@ else()
     add_compile_options(-w)
 endif()
 
+# The following are required for libzstd
+if (EXISTS /opt/local/lib/)
+    link_directories(/opt/local/lib/)
+elseif (EXISTS /opt/homebrew/lib/)
+    link_directories(/opt/homebrew/lib/)
+endif()
+
 if(APPLE)
    # symbols not in the Qt libraries
    #set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -arch x86_64 -arch arm64")
+   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I/opt/homebrew/opt/qt@5/include")
 elseif(UNIX)
    set(LINUX TRUE)
 endif()
@@ -135,14 +143,6 @@ endif ()
 
 set(ICON_PATH resources/IQmol.icns)
 
-# The following are required for libzstd
-if (EXISTS /opt/local/lib/)
-   link_directories(/opt/local/lib/)
-elseif (EXISTS /opt/homebrew/lib/)
-   link_directories(/opt/homebrew/lib/)
-endif()
-
-
 if (APPLE)
    add_executable(${targetName} 
       MACOSX_BUNDLE
@@ -188,8 +188,8 @@ endif (WIN32)
 
 
 # This works on ubuntu, not sure about others
-unset(CMAKE_Fortran_IMPLICIT_LINK_LIBRARIES)
-set(FORTRAN_LIBRARIES libgfortran.a libquadmath.a)
+#unset(CMAKE_Fortran_IMPLICIT_LINK_LIBRARIES)
+#set(FORTRAN_LIBRARIES libgfortran.a libquadmath.a)
 
 target_link_libraries (${targetName}
    Main
