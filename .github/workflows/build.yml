@@ -20,17 +20,8 @@ jobs:
 
       - name: Checkout Project
         uses: actions/checkout@v4.2.2
-      
-      - name: Remove Broken Submodules
-        run: |
-          git submodule deinit -f modules/FFmpeg
-          git submodule deinit -f modules/libpng
-          git submodule deinit -f modules/openssl
-          git submodule deinit -f modules/x246
-          git submodule deinit -f modules/zlib
-      
-      - name: Checkout submodules
-        run: git submodule update --init --recursive
+        with:
+          submodules: recursive
 
       - name: Build Project
         uses: threeal/cmake-action@v2.1.0
