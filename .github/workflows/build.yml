@@ -65,6 +65,7 @@ jobs:
         env:
           QGLViewer_DIR: 
         run: |
+          git rm modules
           cmake -B build
           cmake --build build --parallel
 
@@ -78,5 +79,6 @@ jobs:
           LDFLAGS: -L/opt/homebrew/opt/qt@5/lib
           CPPFLAGS: -I/opt/homebrew/opt/qt@5/include
         run: |
+          git rm modules
           cmake -B build
           cmake --build build --parallel
