@@ -54,6 +54,7 @@ jobs:
           brew install qt@5
           brew install open-mesh
           brew install yaml-cpp
+          git clone https://github.com/GillesDebunne/libQGLViewer.git
       
       - name: Install boost on Windows
         if: ${{ matrix.os == 'windows-latest' }}

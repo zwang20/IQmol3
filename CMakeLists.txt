@@ -88,6 +88,10 @@ else()
    find_package(OpenMesh REQUIRED)
 endif()
 
+if(APPLE)
+    include_directories(libQGLViewer)
+endif()
+
 if(WIN32)
    add_subdirectory(modules/libarchive EXCLUDE_FROM_ALL)
 endif()
