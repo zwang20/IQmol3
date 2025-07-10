@@ -92,6 +92,7 @@ jobs:
       - name: Build Project on Windows
         if: ${{ startsWith( matrix.os, 'windows' ) }}
         run: |
+          call "C:\Program Files (x86)\Intel\oneAPI\setvars.bat" 
           cmake -B build
           cmake --build build
 
@@ -109,8 +110,7 @@ jobs:
         env:
           Qt5_DIR: /opt/homebrew/opt/qt@5
         run: |
-          ls -l /opt/homebrew/opt/icu4c@77
+          find /opt/homebrew/ -name *icu*
           sudo ln -s /opt/homebrew/include/openbabel3/openbabel /opt/homebrew/include/
-          ls -l /opt/homebrew/lib/ 
           cmake -B build
           cmake --build build -j2
