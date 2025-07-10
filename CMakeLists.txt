@@ -14,14 +14,16 @@ set(CMAKE_BUILD_TYPE Release)
 
 set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -Wno-deprecated")
 
-if (APPLE)
+if(APPLE)
    # symbols not in the Qt libraries
    #set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -arch x86_64 -arch arm64")
-elseif (UNIX)
+elseif(UNIX)
    set(LINUX TRUE)
 endif()
 
-set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+if(NOT LINUX)
+   set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+endif()
 
 # We need this to be able to include e.g. "Data/Bank.h" in the sources
 include_directories(src)
@@ -38,28 +40,37 @@ if(ZLIB_FOUND)
 endif()
 
 
-find_package(ZSTD    REQUIRED)
 find_package(Threads REQUIRED)
 find_package(OpenGL  REQUIRED)
 find_package(OpenSSL REQUIRED)
 
-# No CMakeLists.txt for libQGLViewer
-include_directories(modules/libQGLViewer)
-add_subdirectory(modules  EXCLUDE_FROM_ALL)
+if(NOT LINUX)  # use system libraries for linux
 
-include_directories(modules/libssh2/include)
-add_subdirectory(modules/libssh2  EXCLUDE_FROM_ALL)
+   find_package(ZSTD    REQUIRED)
 
-include_directories(modules/openmesh/src)
-add_subdirectory(modules/openmesh  EXCLUDE_FROM_ALL)
-set(OPENMESH_LIBRARIES OpenMeshCoreStatic OpenMeshToolsStatic)
+   # No CMakeLists.txt for libQGLViewer
+   include_directories(modules/libQGLViewer)
+   add_subdirectory(modules  EXCLUDE_FROM_ALL)
 
-include_directories(modules/yaml-cpp/include)
-add_subdirectory(modules/yaml-cpp  EXCLUDE_FROM_ALL)
+   include_directories(modules/libssh2/include)
+   add_subdirectory(modules/libssh2  EXCLUDE_FROM_ALL)
 
-include_directories(modules/openbabel/include)
-include_directories(${CMAKE_CURRENT_BINARY_DIR}/modules/openbabel/include)
-add_subdirectory(modules/openbabel  EXCLUDE_FROM_ALL)
+   include_directories(modules/openmesh/src)
+   add_subdirectory(modules/openmesh  EXCLUDE_FROM_ALL)
+   set(OPENMESH_LIBRARIES OpenMeshCoreStatic OpenMeshToolsStatic)
+
+   include_directories(modules/yaml-cpp/include)
+   add_subdirectory(modules/yaml-cpp  EXCLUDE_FROM_ALL)
+
+   include_directories(modules/openbabel/include)
+   include_directories(${CMAKE_CURRENT_BINARY_DIR}/modules/openbabel/include)
+   add_subdirectory(modules/openbabel  EXCLUDE_FROM_ALL)
+
+elseif (LINUX)
+   find_package(OpenBabel3 REQUIRED)
+   find_package(OpenMesh REQUIRED)
+
+endif()
 
 add_subdirectory(modules/libarchive EXCLUDE_FROM_ALL)
 
