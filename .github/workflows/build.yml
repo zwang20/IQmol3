@@ -65,6 +65,7 @@ jobs:
         env:
           QGLViewer_DIR: 
         run: |
+          cmake -B build
           cmake --build build --parallel
 
       - name: Build Project on Windows
@@ -77,4 +78,5 @@ jobs:
           LDFLAGS: -L/opt/homebrew/opt/qt@5/lib
           CPPFLAGS: -I/opt/homebrew/opt/qt@5/include
         run: |
+          cmake -B build
           cmake --build build --parallel
