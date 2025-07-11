@@ -66,10 +66,7 @@ jobs:
           brew install open-mesh
           brew install yaml-cpp
           git submodule update --init modules/libQGLViewer
-          brew unlink libssh2
-          brew link libssh2
-          brew list libssh2
-      
+
       - name: Install boost on Windows
         if: ${{ startsWith( matrix.os, 'windows' ) }}
         uses: MarkusJx/install-boost@v2
@@ -92,7 +89,8 @@ jobs:
           ls -l C:\ProgramData\mingw64\mingw64\bin
           $env:PATH = "C:\ProgramData\mingw64\mingw32\bin;" + $env:PATH
           $env:PATH = "C:\ProgramData\mingw64\mingw64\bin;" + $env:PATH
-          cat C:\ProgramData\chocolatey\logs\chocolatey.log
+          $env:PATH = "C:\Program Files\CMake\bin;" + $env:PATH
+          ls -l "C:\Program Files\CMake\"
           cmake -B build -DCMAKE_C_COMPILER="C:/ProgramData/mingw64/mingw64/bin/gcc.exe" -CMAKE_CXX_COMPILER="C:/ProgramData/mingw64/mingw64/bin/g++.exe" -DCMAKE_Fortran_COMPILER="C:/ProgramData/mingw64/mingw64/bin/gfortran.exe"
           cmake --build build
 
