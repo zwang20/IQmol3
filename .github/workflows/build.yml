@@ -108,7 +108,8 @@ jobs:
         run: |
           ls -L /opt/homebrew/opt/libssh2/lib/
           ls -L /opt/homebrew/lib/ 
-          ls -L /opt/homebrew/lib/openbabel || true
+          echo =====
+          ls -L /opt/homebrew/lib/openbabel/3.1.0 || true
           sudo ln -s /opt/homebrew/include/openbabel3/openbabel /opt/homebrew/include/
           cmake -B build
           cmake --build build -j4
