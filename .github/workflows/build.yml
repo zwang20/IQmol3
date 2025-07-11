@@ -91,13 +91,17 @@ jobs:
           ls -l C:\ProgramData\mingw64\mingw64\bin
           $env:PATH = "C:\ProgramData\mingw64\mingw32\bin;" + $env:PATH
           $env:PATH = "C:\ProgramData\mingw64\mingw64\bin;" + $env:PATH
-          cmake -B build -DCMAKE_Fortran_COMPILER="C:/ProgramData/mingw64/mingw64/bin/x86_64-w64-mingw32-gfortran.exe"
+          cmake -B build \
+            -DCMAKE_C_COMPILER="C:/ProgramData/mingw64/mingw64/bin/gcc.exe" \
+            -CMAKE_CXX_COMPILER="C:/ProgramData/mingw64/mingw64/bin/g++.exe" \
+            -DCMAKE_Fortran_COMPILER="C:/ProgramData/mingw64/mingw64/bin/gfortran.exe"
           cmake --build build
 
       - name: Build Project on MacOS 13
         if: ${{ matrix.os == 'macos-13' }}
         env:
           Qt5_DIR: /usr/local/opt/qt@5
+          libssh2_DIR: /opt/local/opt/libssh2
         run: |
           ls -L /usr/local/opt/icu4c/
           sudo ln -s /usr/local/include/openbabel3/openbabel /usr/local/include/
@@ -108,8 +112,8 @@ jobs:
         if: ${{ ( matrix.os == 'macos-14' ) || ( matrix.os == 'macos-15' ) }}
         env:
           Qt5_DIR: /opt/homebrew/opt/qt@5
+          libssh2_DIR: /opt/homebrew/opt/libssh2
         run: |
-          ls -L /opt/homebrew/opt/libssh2/lib
           sudo ln -s /opt/homebrew/include/openbabel3/openbabel /opt/homebrew/include/
           cmake -B build
           cmake --build build -j4
