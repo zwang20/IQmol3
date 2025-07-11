@@ -217,7 +217,6 @@ target_link_libraries(${targetName}
     Plot
     Fort
     Amber
-    OpenMeshTools
     QGLViewer
     Qt5::Core
     Qt5::Gui
@@ -236,7 +235,7 @@ target_link_libraries(${targetName}
 )
 
 if(LINUX)
-    target_link_libraries(${targetName} ssh2 yaml-cpp openbabel)
+    target_link_libraries(${targetName} ssh2 yaml-cpp openbabel OpenMeshTools)
 elseif(APPLE)
     target_link_libraries(${targetName} libssh2 open-babel)
 elseif(WIN32)

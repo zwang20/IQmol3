@@ -26,9 +26,9 @@ jobs:
 
       - name: Setup Fortran on Windows
         if: ${{ startsWith( matrix.os, 'windows' ) }}
-        uses: fortran-lang/setup-fortran@v1
-        with:
-          compiler: 'intel'
+        run: |
+          choco install mingw -y
+          echo "C:\tools\mingw64\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
 
       - name: Install Qt
         if: ${{ startsWith( matrix.os, 'windows' ) }}
@@ -65,7 +65,6 @@ jobs:
           brew install qt@5
           brew install open-mesh
           brew install yaml-cpp
-          brew link icu4c
           git submodule update --init modules/libQGLViewer
       
       - name: Install boost on Windows
@@ -105,7 +104,6 @@ jobs:
         env:
           Qt5_DIR: /opt/homebrew/opt/qt@5
         run: |
-          brew list libssh2
           sudo ln -s /opt/homebrew/include/openbabel3/openbabel /opt/homebrew/include/
           cmake -B build
           cmake --build build -j4
