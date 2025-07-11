@@ -91,7 +91,7 @@ jobs:
           ls -l C:\ProgramData\mingw64\mingw64\bin
           $env:PATH = "C:\ProgramData\mingw64\mingw32\bin;" + $env:PATH
           $env:PATH = "C:\ProgramData\mingw64\mingw64\bin;" + $env:PATH
-          cmake -B build
+          cmake -B build -DCMAKE_Fortran_COMPILER="C:/ProgramData/mingw64/mingw64/bin/x86_64-w64-mingw32-gfortran.exe"
           cmake --build build
 
       - name: Build Project on MacOS 13

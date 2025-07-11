@@ -45,13 +45,15 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR}/src)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 if(APPLE)
+    find_package(libssh2 REQUIRED)
+
     # intel macos
     include_directories(/usr/local/include)
     include_directories(/usr/local/opt/libarchive/include)
 
     # arm macos
+
     link_directories(/opt/local/lib)
-    link_directories(/opt/homebrew/opt/libssh2/lib)
     link_directories(/opt/homebrew/opt/icu4c/lib)
     include_directories(/opt/homebrew/include)
     include_directories(/opt/homebrew/opt/icu4c/include)
