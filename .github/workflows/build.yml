@@ -92,6 +92,7 @@ jobs:
           ls -l C:\ProgramData\mingw64\mingw64\bin
           $env:PATH = "C:\ProgramData\mingw64\mingw32\bin;" + $env:PATH
           $env:PATH = "C:\ProgramData\mingw64\mingw64\bin;" + $env:PATH
+          cat C:\ProgramData\chocolatey\logs\chocolatey.log
           cmake -B build -DCMAKE_C_COMPILER="C:/ProgramData/mingw64/mingw64/bin/gcc.exe" -CMAKE_CXX_COMPILER="C:/ProgramData/mingw64/mingw64/bin/g++.exe" -DCMAKE_Fortran_COMPILER="C:/ProgramData/mingw64/mingw64/bin/gfortran.exe"
           cmake --build build
 
