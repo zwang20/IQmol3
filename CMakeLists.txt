@@ -51,7 +51,7 @@ if(APPLE)
 
     # arm macos
     link_directories(/opt/local/lib)
-    link_directories(/opt/homebrew/Cellar/libssh2/1.11.1/lib)
+    link_directories(/opt/homebrew/opt/libssh2/lib)
     link_directories(/opt/homebrew/opt/icu4c/lib)
     include_directories(/opt/homebrew/include)
     include_directories(/opt/homebrew/opt/icu4c/include)
