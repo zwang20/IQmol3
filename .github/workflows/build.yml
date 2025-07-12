@@ -28,7 +28,7 @@ jobs:
         if: ${{ startsWith( matrix.os, 'windows' ) }}
         uses: fortran-lang/setup-fortran@v1
         with:
-          compiler: "intel"
+          compiler: "intel-classic"
 
       - name: Install Qt
         if: ${{ startsWith( matrix.os, 'windows' ) }}
