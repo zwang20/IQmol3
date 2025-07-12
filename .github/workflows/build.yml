@@ -93,7 +93,7 @@ jobs:
           ls -l 'C:\Program Files (x86)\Intel\oneAPI\compiler\latest\'
           ls -l 'C:\Program Files (x86)\Intel\oneAPI\compiler\latest\bin\'
           # CMAKE_Fortran_COMPILER
-          cmake -B build -DCMAKE_Fortran_COMPILER='C:\Program Files (x86)\Intel\oneAPI\compiler\latest\bin\ifx.exe'
+          cmake -B build -DCMAKE_Fortran_COMPILER='C:\Program Files (x86)/Intel/oneAPI/compiler/latest/bin/ifx.exe'
           cmake --build build
 
       - name: Build Project on MacOS 13
