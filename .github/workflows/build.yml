@@ -65,7 +65,8 @@ jobs:
           brew install qt@5
           brew install open-mesh
           brew install yaml-cpp
-          brew list open-babel
+          brew install zstd
+          brew list zstd
           git submodule update --init modules/libQGLViewer
 
       - name: Install boost on Windows
