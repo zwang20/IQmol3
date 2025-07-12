@@ -88,6 +88,7 @@ jobs:
 
       - name: Build Project on Windows
         if: ${{ startsWith( matrix.os, 'windows' ) }}
+        shell: bash
         run: |
           cmake -B build
           cmake --build build
@@ -114,5 +115,7 @@ jobs:
           echo =====
           ls -Ll /opt/homebrew/lib/
           sudo ln -s /opt/homebrew/include/openbabel3/openbabel /opt/homebrew/include/
+          sudo ln -s /opt/homebrew/lib/libzstd.dylib zstd.dylib
+          sudo mv zstd.dylib /opt/homebrew/lib/
           cmake -B build
           cmake --build build -j4
