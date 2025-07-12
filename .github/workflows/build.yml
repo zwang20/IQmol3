@@ -111,6 +111,8 @@ jobs:
           # ls -L /opt/homebrew/lib/ 
           echo =====
           ls -L /opt/homebrew/lib/openbabel/3.1.0 || true
+          echo =====
+          ls -Ll /opt/homebrew/lib/
           sudo ln -s /opt/homebrew/include/openbabel3/openbabel /opt/homebrew/include/
           cmake -B build
           cmake --build build -j4
