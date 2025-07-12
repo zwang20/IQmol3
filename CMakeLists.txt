@@ -221,7 +221,6 @@ target_link_libraries(${targetName}
     Plot
     Fort
     Amber
-    openbabel
     QGLViewer
     Qt5::Core
     Qt5::Gui
@@ -240,7 +239,7 @@ target_link_libraries(${targetName}
 )
 
 if(LINUX)
-    target_link_libraries(${targetName} ssh2 yaml-cpp  OpenMeshTools)
+    target_link_libraries(${targetName} ssh2 yaml-cpp OpenMeshTools openbabel)
 elseif(APPLE)
     if(EXISTS /opt/homebrew/opt/libssh2/lib/libssh2.dylib)
         target_link_libraries(${targetName} /opt/homebrew/opt/libssh2/lib/libssh2.dylib)
@@ -250,7 +249,7 @@ elseif(APPLE)
         target_link_libraries(${targetName} libssh2)
     endif()
 elseif(WIN32)
-    target_link_libraries(${targetName} libssh2)
+    target_link_libraries(${targetName} libssh2 openbabel)
 endif()
 
 if(QARCHIVE)
