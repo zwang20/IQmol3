@@ -99,6 +99,8 @@ if(WIN32)  # use system libraries for unix-like
     add_subdirectory(modules/libarchive EXCLUDE_FROM_ALL)
 
 elseif(APPLE)
+    find_package(ZSTD    REQUIRED)
+
     # brew does not package libqglviewer
     include_directories(modules/libQGLViewer)
     add_subdirectory(modules  EXCLUDE_FROM_ALL)
