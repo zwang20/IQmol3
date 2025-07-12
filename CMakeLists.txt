@@ -100,6 +100,7 @@ if(WIN32)  # use system libraries for unix-like
 
 elseif(APPLE)
     find_package(ZSTD    REQUIRED)
+    link_libraries(${target_name} zstd::libzstd_shared)
 
     # brew does not package libqglviewer
     include_directories(modules/libQGLViewer)
