@@ -90,6 +90,7 @@ jobs:
         if: ${{ startsWith( matrix.os, 'windows' ) }}
         shell: bash
         run: |
+          ls -l "C:\Program Files (x86)\Intel\oneAPI\compiler\latest"
           cmake -B build
           cmake --build build
 
@@ -108,14 +109,10 @@ jobs:
         env:
           Qt5_DIR: /opt/homebrew/opt/qt@5
         run: |
-          # ls -L /opt/homebrew/opt/libssh2/lib/
-          # ls -L /opt/homebrew/lib/ 
-          echo =====
-          ls -L /opt/homebrew/lib/openbabel/3.1.0 || true
-          echo =====
-          ls -Ll /opt/homebrew/lib/
           sudo ln -s /opt/homebrew/include/openbabel3/openbabel /opt/homebrew/include/
           sudo ln -s /opt/homebrew/lib/libzstd.dylib zstd.dylib
           sudo mv zstd.dylib /opt/homebrew/lib/
+          echo =====
+          ls -Ll /opt/homebrew/lib/
           cmake -B build
           cmake --build build -j4
