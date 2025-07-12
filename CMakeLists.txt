@@ -20,9 +20,9 @@ else()
     add_compile_options(-w)
 endif()
 
-if (EXISTS /opt/local/lib/)
-    link_directories(/opt/local/lib/)
-endif()
+#if (EXISTS /opt/local/lib/)
+#    link_directories(/opt/local/lib/)
+#endif()
 
 if(APPLE)
     # symbols not in the Qt libraries
