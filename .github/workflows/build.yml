@@ -1,0 +1,122 @@
+name: Build
+on: [ push, pull_request ]
+jobs:
+  build-project:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, ubuntu-24.04-arm, windows-2022, windows-2025, macos-13, macos-14, macos-15]
+    name: Build Project
+    runs-on: ${{ matrix.os }}
+    steps:
+
+      - name: Checkout Project
+        if: ${{ ! startsWith( matrix.os, 'windows' ) }}
+        uses: actions/checkout@v4.2.2
+      
+      - name: Checkout Project on Windows
+        if: ${{ startsWith( matrix.os, 'windows' ) }}
+        uses: actions/checkout@v4.2.2
+        with:
+          submodules: recursive
+
+      - name: Setup Fortran
+        if: ${{ ! startsWith( matrix.os, 'windows' ) }}
+        uses: fortran-lang/setup-fortran@v1
+
+      - name: Setup Fortran on Windows
+        if: ${{ startsWith( matrix.os, 'windows' ) }}
+        uses: fortran-lang/setup-fortran@v1
+        with:
+          compiler: "intel-classic"
+
+      - name: Install Qt
+        if: ${{ startsWith( matrix.os, 'windows' ) }}
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: 5.*
+      
+      - name: Install Dependencies on Ubuntu
+        if: ${{ startsWith( matrix.os, 'ubuntu' ) }}
+        run: |
+          sudo apt-get update
+          sudo apt-get install libarchive-dev -y
+          sudo apt-get install librust-bzip2-dev -y
+          sudo apt-get install liblzma-dev -y
+          sudo apt-get install libb2-dev -y
+          sudo apt-get install libssh2-1-dev -y
+          sudo apt-get install libqglviewer-dev-qt5 -y
+          sudo apt-get install libopenmesh-dev -y
+          sudo apt-get install libyaml-cpp-dev -y
+          sudo apt-get install libopenbabel-dev -y
+          sudo apt-get install libboost-iostreams-dev libboost-serialization-dev -y
+          sudo apt-get install qtbase5-dev -y
+          sudo ln -s /usr/include/openbabel3/openbabel /usr/include/
+          git submodule update --init modules/libQGLViewer
+      
+      - name: Install Dependencies on MacOS
+        if: ${{ startsWith( matrix.os, 'macos' ) }}
+        run: |
+          brew install boost
+          brew install icu4c
+          brew install libarchive
+          brew install libssh2
+          brew install open-babel
+          brew install qt@5
+          brew install open-mesh
+          brew install yaml-cpp
+          brew install zstd
+          brew list zstd
+          git submodule update --init modules/libQGLViewer
+
+      - name: Install boost on Windows
+        if: ${{ startsWith( matrix.os, 'windows' ) }}
+        uses: MarkusJx/install-boost@v2
+        id: install-boost
+        with:
+          # REQUIRED: Specify the required boost version
+          # A list of supported versions can be found here:
+          # https://github.com/MarkusJx/prebuilt-boost/blob/main/versions-manifest.json
+          boost_version: 1.73.0
+
+      - name: Build Project on Ubuntu
+        if: ${{ startsWith( matrix.os, 'ubuntu' ) }}
+        run: |
+          cmake -B build
+          cmake --build build -j4
+          ctest
+
+      - name: Build Project on Windows
+        if: ${{ startsWith( matrix.os, 'windows' ) }}
+        shell: bash
+        run: |
+          ls -l 'C:\Program Files (x86)\Intel\oneAPI\compiler\latest\'
+          ls -l 'C:\Program Files (x86)\Intel\oneAPI\compiler\latest\bin\'
+          # CMAKE_Fortran_COMPILER
+          cmake -B build -DCMAKE_Fortran_COMPILER='C:/Program Files (x86)/Intel/oneAPI/compiler/latest/bin/ifx.exe'
+          cmake --build build
+
+      - name: Build Project on MacOS 13
+        if: ${{ matrix.os == 'macos-13' }}
+        env:
+          Qt5_DIR: /usr/local/opt/qt@5
+        run: |
+          ls -L /usr/local/opt/icu4c/
+          sudo ln -s /usr/local/include/openbabel3/openbabel /usr/local/include/
+          cmake -B build
+          cmake --build build
+
+      - name: Build Project on MacOS 14 and 15
+        if: ${{ ( matrix.os == 'macos-14' ) || ( matrix.os == 'macos-15' ) }}
+        env:
+          Qt5_DIR: /opt/homebrew/opt/qt@5
+        run: |
+          sudo ln -s /opt/homebrew/include/openbabel3/openbabel /opt/homebrew/include/
+          sudo ln -s /opt/homebrew/lib/libzstd.dylib zstd.dylib
+          sudo mv zstd.dylib /opt/homebrew/lib/
+          sudo ln -s /opt/homebrew/lib/libzstd.a zstd.a
+          sudo mv zstd.a /opt/homebrew/lib/
+          echo =====
+          ls -lL /opt/homebrew/lib/
+          cmake -B build
+          cmake --build build -j4

@@ -12,16 +12,31 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 #set(CMAKE_BUILD_TYPE Debug)
 set(CMAKE_BUILD_TYPE Release)
 
-set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -Wno-deprecated")
-
-if (APPLE)
-   # symbols not in the Qt libraries
-   #set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -arch x86_64 -arch arm64")
-elseif (UNIX)
-   set(LINUX TRUE)
+#set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -Wno-deprecated")
+# Hide all warnings for 3rdparty code (TODO: re-enable warnings)
+if (MSVC)
+    add_compile_options(/W0)
+else()
+    add_compile_options(-w)
 endif()
 
-set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+#if (EXISTS /opt/local/lib/)
+#    link_directories(/opt/local/lib/)
+#endif()
+
+if(APPLE)
+    # symbols not in the Qt libraries
+    #set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -arch x86_64 -arch arm64")
+    #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I/opt/homebrew/opt/qt@5/include")'
+    set(CMAKE_C_COMPILER "/usr/bin/clang")
+    set(CMAKE_CXX_COMPILER "/usr/bin/clang++")
+elseif(UNIX)
+    set(LINUX TRUE)
+endif()
+
+if(WIN32)
+   set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+endif()
 
 # We need this to be able to include e.g. "Data/Bank.h" in the sources
 include_directories(src)
@@ -29,6 +44,23 @@ include_directories(src)
 include_directories(${CMAKE_CURRENT_BINARY_DIR}/src)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 
+if(APPLE)
+    # intel macos
+    include_directories(/usr/local/include)
+    include_directories(/usr/local/opt/libarchive/include)
+
+    # arm macos
+
+    link_directories(/opt/local/lib)
+    link_directories(/opt/homebrew/opt/icu4c/lib)
+    link_directories(/opt/homebrew/opt/libssh2/lib)
+    link_directories(/opt/homebrew/lib/openbabel/3.1.0)
+    include_directories(/opt/homebrew/include)
+    include_directories(/opt/homebrew/opt/icu4c/include)
+    include_directories(/opt/homebrew/opt/libssh2/include)
+    include_directories(/opt/homebrew/opt/qt@5/include)
+    include_directories(/opt/homebrew/opt/libarchive/include)
+endif()
 
 find_package(Qt5 COMPONENTS Core Gui Xml PrintSupport Widgets OpenGL Sql REQUIRED)
 
@@ -38,30 +70,51 @@ if(ZLIB_FOUND)
 endif()
 
 
-find_package(ZSTD    REQUIRED)
 find_package(Threads REQUIRED)
 find_package(OpenGL  REQUIRED)
 find_package(OpenSSL REQUIRED)
 
-# No CMakeLists.txt for libQGLViewer
-include_directories(modules/libQGLViewer)
-add_subdirectory(modules  EXCLUDE_FROM_ALL)
+if(WIN32)  # use system libraries for unix-like
 
-include_directories(modules/libssh2/include)
-add_subdirectory(modules/libssh2  EXCLUDE_FROM_ALL)
+    find_package(ZSTD    REQUIRED)
 
-include_directories(modules/openmesh/src)
-add_subdirectory(modules/openmesh  EXCLUDE_FROM_ALL)
-set(OPENMESH_LIBRARIES OpenMeshCoreStatic OpenMeshToolsStatic)
+    # No CMakeLists.txt for libQGLViewer
+    include_directories(modules/libQGLViewer)
+    add_subdirectory(modules  EXCLUDE_FROM_ALL)
 
-include_directories(modules/yaml-cpp/include)
-add_subdirectory(modules/yaml-cpp  EXCLUDE_FROM_ALL)
+    include_directories(modules/libssh2/include)
+    add_subdirectory(modules/libssh2  EXCLUDE_FROM_ALL)
 
-include_directories(modules/openbabel/include)
-include_directories(${CMAKE_CURRENT_BINARY_DIR}/modules/openbabel/include)
-add_subdirectory(modules/openbabel  EXCLUDE_FROM_ALL)
+    include_directories(modules/openmesh/src)
+    add_subdirectory(modules/openmesh  EXCLUDE_FROM_ALL)
+    set(OPENMESH_LIBRARIES OpenMeshCoreStatic OpenMeshToolsStatic)
 
-add_subdirectory(modules/libarchive EXCLUDE_FROM_ALL)
+    include_directories(modules/yaml-cpp/include)
+    add_subdirectory(modules/yaml-cpp  EXCLUDE_FROM_ALL)
+
+    include_directories(modules/openbabel/include)
+    include_directories(${CMAKE_CURRENT_BINARY_DIR}/modules/openbabel/include)
+    add_subdirectory(modules/openbabel  EXCLUDE_FROM_ALL)
+
+    add_subdirectory(modules/libarchive EXCLUDE_FROM_ALL)
+
+elseif(APPLE)
+    find_package(ZSTD    REQUIRED)
+    link_libraries(${target_name} zstd::libzstd_shared)
+
+    # brew does not package libqglviewer
+    include_directories(modules/libQGLViewer)
+    add_subdirectory(modules  EXCLUDE_FROM_ALL)
+elseif(LINUX)
+   find_package(OpenBabel3 REQUIRED)
+   find_package(OpenMesh REQUIRED)
+
+    # ubuntu does not package libqglviewer
+   if (EXISTS modules/libQGLViewer)
+       include_directories(modules/libQGLViewer)
+       add_subdirectory(modules  EXCLUDE_FROM_ALL)
+   endif()
+endif()
 
 if (WITH_GROMACS)
    add_compile_definitions(GROMACS)
@@ -112,14 +165,6 @@ endif ()
 
 set(ICON_PATH resources/IQmol.icns)
 
-# The following are required for libzstd
-if (EXISTS /opt/local/lib/)
-   link_directories(/opt/local/lib/)
-elseif (EXISTS /opt/homebrew/lib/)
-   link_directories(/opt/homebrew/lib/)
-endif()
-
-
 if (APPLE)
    add_executable(${targetName} 
       MACOSX_BUNDLE
@@ -147,7 +192,7 @@ if (LINUX)
       ${IQmol_RESOURCES_RCC}
    )
 
-   target_link_libraries(${targetName} -static-libgcc -static-libstdc++)
+   # target_link_libraries(${targetName} -static-libgcc -static-libstdc++)
 endif (LINUX)
 
 
@@ -163,48 +208,62 @@ if (WIN32)
    set_target_properties(${targetName} PROPERTIES WIN32_EXECUTABLE ON)
 endif (WIN32)
 
-
-# This works on ubuntu, not sure about others
-unset(CMAKE_Fortran_IMPLICIT_LINK_LIBRARIES)
-set(FORTRAN_LIBRARIES libgfortran.a libquadmath.a)
-
-target_link_libraries (${targetName}
-   Main
-   Process
-   Parser
-   Network
-   Qui 
-   Layer
-   Viewer
-   Configurator
-   Data
-   Grid
-   Util
-   Math
-   Plot
-   Fort
-   libssh2
-   yaml-cpp
-   openbabel
-   QGLViewer
-   Qt5::Core
-   Qt5::Gui
-   Qt5::Xml
-   Qt5::PrintSupport
-   Qt5::Widgets
-   Qt5::OpenGL
-   Qt5::Sql
-   ${OPENMESH_LIBRARIES}
-   ${Boost_LIBRARIES}
-   ${LIBSSH2_LIBRARY}
-   ${OPENGL_LIBRARIES}
-   ${ZLIB_LIBRARIES}
-   ${FORTRAN_LIBRARIES}
-   archive
+target_link_libraries(${targetName}
+    Main
+    Process
+    Parser
+    Network
+    Qui
+    Layer
+    Viewer
+    Configurator
+    Data
+    Grid
+    Util
+    Math
+    Plot
+    Fort
+    Amber
+    QGLViewer
+    Qt5::Core
+    Qt5::Gui
+    Qt5::Xml
+    Qt5::PrintSupport
+    Qt5::Widgets
+    Qt5::OpenGL
+    Qt5::Sql
+    ${OPENMESH_LIBRARIES}
+    ${Boost_LIBRARIES}
+    ${LIBSSH2_LIBRARY}
+    ${OPENGL_LIBRARIES}
+    ${ZLIB_LIBRARIES}
+    ${FORTRAN_LIBRARIES}
+    archive
 )
 
+if(LINUX)
+    target_link_libraries(${targetName} ssh2 yaml-cpp OpenMeshTools openbabel)
+elseif(APPLE)
+    if(EXISTS /opt/homebrew/opt/libssh2/lib/libssh2.dylib)
+        target_link_libraries(${targetName} /opt/homebrew/opt/libssh2/lib/libssh2.dylib)
+    elseif(EXISTS /usr/local/opt/libssh2/lib/libssh2.dylib)
+        target_link_libraries(${targetName} /usr/local/opt/libssh2/lib/libssh2.dylib)
+    else()
+        target_link_libraries(${targetName} libssh2)
+    endif()
+    if(EXISTS /opt/homebrew/lib/libzstd.dylib)
+        target_link_libraries(${targetName} /opt/homebrew/lib/libzstd.dylib)
+    elseif(EXISTS /usr/local/lib/libzstd.dylib)
+        target_link_libraries(${targetName} /usr/local/lib/libzstd.dylib)
+    else()
+        target_link_libraries(${targetName} libzstd)
+    endif()
+elseif(WIN32)
+    target_link_libraries(${targetName} libssh2 openbabel)
+endif()
+
 if(QARCHIVE)
-   target_link_libraries (${targetName} archive_impl ${ARMADILLO_LIBRARY})
+   target_link_libraries(${targetName} archive_impl ${ARMADILLO_LIBRARY})
 else(QARCHIVE)
 #   target_link_libraries (${targetName} hdf5-static)
 endif(QARCHIVE)
